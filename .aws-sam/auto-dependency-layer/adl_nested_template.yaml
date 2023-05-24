@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS SAM CLI Nested Stack for Auto Dependency Layer Creation
+Metadata:
+  SamCliInfo: 1.84.0
+  key: AWS SAM CLI sync command
+Outputs:
+  AlgoliaTokenFunction1a812fe6DepLayer:
+    Value:
+      Ref: AlgoliaTokenFunction1a812fe6DepLayer
+Resources:
+  AlgoliaTokenFunction1a812fe6DepLayer:
+    Metadata:
+      CreatedBy: AWS SAM CLI sync command
+    Properties:
+      CompatibleRuntimes:
+      - python3.9
+      ContentUri: /Users/chuckmeyer/Documents/GitHub/sam-app/.aws-sam/auto-dependency-layer/AlgoliaTokenFunction1a812fe6DepLayer
+      Description: Auto created layer for dependencies of function AlgoliaTokenFunction
+      LayerName: sam-app7427b055-AlgoliaTokenFunction1a812fe6-DepLayer
+      RetentionPolicy: Delete
+    Type: AWS::Serverless::LayerVersion
+Transform: AWS::Serverless-2016-10-31

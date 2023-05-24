@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'sam-app
+
+  Sample SAM Template for sam-app
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+Resources:
+  AlgoliaTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: AlgoliaTokenFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+      - x86_64
+      Events:
+        AlgoliaToken:
+          Type: Api
+          Properties:
+            Path: /algolia-token
+            Method: get
+      Layers:
+      - Fn::GetAtt:
+        - AwsSamAutoDependencyLayerNestedStack
+        - Outputs.AlgoliaTokenFunction1a812fe6DepLayer
+    Metadata:
+      SamResourceId: AlgoliaTokenFunction
+  AwsSamAutoDependencyLayerNestedStack:
+    DeletionPolicy: Delete
+    Metadata:
+      CreatedBy: AWS SAM CLI sync command
+    Properties:
+      TemplateURL: /Users/chuckmeyer/Documents/GitHub/sam-app/.aws-sam/auto-dependency-layer/adl_nested_template.yaml
+    Type: AWS::CloudFormation::Stack
+Outputs:
+  AlgoliaTokenApi:
+    Description: API Gateway endpoint URL for Prod stage for Algolia Token function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/algolia-token/
+  AlgoliaTokenFunction:
+    Description: Algolia Token Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - AlgoliaTokenFunction
+      - Arn
+  AlgoliaTokenFunctionIamRole:
+    Description: Implicit IAM Role created for Algolia Token function
+    Value:
+      Fn::GetAtt:
+      - AlgoliaTokenFunctionRole
+      - Arn
