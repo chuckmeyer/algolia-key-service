@@ -10,6 +10,12 @@ Globals:
   Function:
     Timeout: 3
     MemorySize: 128
+    Environment:
+      Variables:
+        ALGOLIA_API_SEARCH_KEY: "2ee1381ed11d3fe70b60605b1e2cd3f4"
+        ALGOLIA_KEY_FILTER_ATTRIBUTE: "tenantID"
+        ALGOLIA_KEY_INDICES: "multi-tenant-demo"
+        ALGOLIA_KEY_DURATION: 3600
 
 Resources:
   AlgoliaTokenFunction:

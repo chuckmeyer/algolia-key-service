@@ -1,5 +1,5 @@
 import json
-
+import os
 import requests
 import time
 from algoliasearch.search_client import SearchClient
@@ -26,10 +26,9 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
     body = json.loads(event["body"])
-    algolia_key_filter_attribute = "tenantID"
-    algolia_key_duration = 3600
-    algolia_key_indices = "multi-tenant-demo"
-    algolia_api_search_key = "2ee1381ed11d3fe70b60605b1e2cd3f4"
+    filter_attribute = os.environ["ALGOLIA_KEY_FILTER_ATTRIBUTE"]
+    duration = int(os.environ["ALGOLIA_KEY_DURATION"])
+    indices = os.environ["ALGOLIA_KEY_INDICES"]
 
     try:
         ip = requests.get("http://checkip.amazonaws.com/")
@@ -39,13 +38,13 @@ def lambda_handler(event, context):
 
         raise e
 
-    valid_until = int(time.time()) + algolia_key_duration
+    valid_until = int(time.time()) + duration
     public_key = SearchClient.generate_secured_api_key(
-        algolia_api_search_key,
+        os.environ["ALGOLIA_API_SEARCH_KEY"],
         {
             "validUntil": valid_until,
-            "restrictIndices": algolia_key_indices,
-            "filters": f"{algolia_key_filter_attribute}:{body['Id']}"
+            "restrictIndices": indices,
+            "filters": f"{filter_attribute}:{body['Id']}"
         }
     )
 
