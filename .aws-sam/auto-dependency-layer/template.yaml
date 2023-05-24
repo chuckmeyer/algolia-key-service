@@ -23,7 +23,7 @@ Resources:
           Type: Api
           Properties:
             Path: /algolia-token
-            Method: get
+            Method: post
       Layers:
       - Fn::GetAtt:
         - AwsSamAutoDependencyLayerNestedStack

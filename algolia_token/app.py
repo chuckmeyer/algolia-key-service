@@ -25,6 +25,11 @@ def lambda_handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
+    body = json.loads(event["body"])
+    algolia_key_filter_attribute = "tenantID"
+    algolia_key_duration = 3600
+    algolia_key_indices = "multi-tenant-demo"
+    algolia_api_search_key = "2ee1381ed11d3fe70b60605b1e2cd3f4"
 
     try:
         ip = requests.get("http://checkip.amazonaws.com/")
@@ -34,13 +39,13 @@ def lambda_handler(event, context):
 
         raise e
 
-    valid_until = int(time.time()) + 3600
+    valid_until = int(time.time()) + algolia_key_duration
     public_key = SearchClient.generate_secured_api_key(
-        "2ee1381ed11d3fe70b60605b1e2cd3f4",
+        algolia_api_search_key,
         {
             "validUntil": valid_until,
-            "restrictIndices": "multi-tenant-demo",
-            "filters": "tenantID:tenantB"
+            "restrictIndices": algolia_key_indices,
+            "filters": f"{algolia_key_filter_attribute}:{body['Id']}"
         }
     )
 
@@ -48,6 +53,7 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "body": json.dumps({
             "location": ip.text.replace("\n", ""),
+            "id": body["Id"],
             "searchKey": public_key
         }),
     }
